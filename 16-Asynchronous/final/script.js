@@ -1,39 +1,39 @@
-'use strict';
+// 'use strict';
 
-const btn = document.querySelector('.btn-country');
-const countriesContainer = document.querySelector('.countries');
+// const btn = document.querySelector('.btn-country');
+// const countriesContainer = document.querySelector('.countries');
 
-const renderCountry = function (data, className = '') {
-  const html = `
-  <article class="country ${className}">
-    <img class="country__img" src="${data.flag}" />
-    <div class="country__data">
-      <h3 class="country__name">${data.name}</h3>
-      <h4 class="country__region">${data.region}</h4>
-      <p class="country__row"><span>👫</span>${(
-        +data.population / 1000000
-      ).toFixed(1)} people</p>
-      <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
-      <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
-    </div>
-  </article>
-  `;
-  countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
-};
+// const renderCountry = function (data, className = '') {
+//   const html = `
+//   <article class="country ${className}">
+//     <img class="country__img" src="${data.flag}" />
+//     <div class="country__data">
+//       <h3 class="country__name">${data.name}</h3>
+//       <h4 class="country__region">${data.region}</h4>
+//       <p class="country__row"><span>👫</span>${(
+//         +data.population / 1000000
+//       ).toFixed(1)} people</p>
+//       <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+//       <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+//     </div>
+//   </article>
+//   `;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   countriesContainer.style.opacity = 1;
+// };
 
-const renderError = function (msg) {
-  countriesContainer.insertAdjacentText('beforeend', msg);
-  countriesContainer.style.opacity = 1;
-};
+// const renderError = function (msg) {
+//   countriesContainer.insertAdjacentText('beforeend', msg);
+//   countriesContainer.style.opacity = 1;
+// };
 
-const getJSON = function (url, errorMsg = 'Something went wrong') {
-  return fetch(url).then(response => {
-    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
+// const getJSON = function (url, errorMsg = 'Something went wrong') {
+//   return fetch(url).then(response => {
+//     if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
 
-    return response.json();
-  });
-};
+//     return response.json();
+//   });
+// };
 
 /*
 ///////////////////////////////////////
@@ -411,24 +411,26 @@ const wait = function (seconds) {
   });
 };
 
+*/
 const imgContainer = document.querySelector('.images');
 
-const createImage = function (imgPath) {
-  return new Promise(function (resolve, reject) {
-    const img = document.createElement('img');
-    img.src = imgPath;
+// const createImage = function (imgPath) {
+//   return new Promise(function (resolve, reject) {
+//     const img = document.createElement('img');
+//     img.src = imgPath;
 
-    img.addEventListener('load', function () {
-      imgContainer.append(img);
-      resolve(img);
-    });
+//     img.addEventListener('load', function () {
+//       imgContainer.append(img);
+//       resolve(img);
+//     });
 
-    img.addEventListener('error', function () {
-      reject(new Error('Image not found'));
-    });
-  });
-};
+//     img.addEventListener('error', function () {
+//       reject(new Error('Image not found'));
+//     });
+//   });
+// };
 
+/*
 let currentImg;
 
 createImage('img/img-1.jpg')
@@ -675,10 +677,11 @@ const wait = function (seconds) {
 };
 
 const imgContainer = document.querySelector('.images');
-
-const createImage = function (imgPath) {
+*/
+const createImage = function (imgPath, className = '') {
   return new Promise(function (resolve, reject) {
     const img = document.createElement('img');
+    className && img.classList.add(className);
     img.src = imgPath;
 
     img.addEventListener('load', function () {
@@ -691,7 +694,7 @@ const createImage = function (imgPath) {
     });
   });
 };
-
+/*
 let currentImg;
 
 // createImage('img/img-1.jpg')
@@ -733,17 +736,20 @@ const loadNPause = async function () {
   }
 };
 // loadNPause();
-
+*/
 // PART 2
 const loadAll = async function (imgArr) {
   try {
-    const imgs = imgArr.map(async img => await createImage(img));
-    const imgsEl = await Promise.all(imgs);
-    console.log(imgsEl);
-    imgsEl.forEach(img => img.classList.add('parallel'));
+    // const imgs = imgArr.map(img => createImage(img, 'parallel'));
+    // const imgsEl = await Promise.all(imgs);
+    // console.log(imgsEl);
+    // const image1 = await createImage(imgArr[0], 'parallel')
+    // const image2 = await createImage(imgArr[2], 'parallel')
+    // const imgge3 = await createImage(imgArr[1], 'parallel')
+    const images = await Promise.all(imgArr.map(path=>createImage(path, 'parallel')))
+    console.log(images)
   } catch (err) {
     console.error(err);
   }
 };
 loadAll(['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']);
-*/
