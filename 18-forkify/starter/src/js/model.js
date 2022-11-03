@@ -4,11 +4,15 @@ import { getJSON } from './helpers';
 
 export const state = {
   recipe: {},
+  search: {
+    query: '',
+    results: [],
+  },
 };
 
 export async function loadRecipe(id) {
   try {
-    const json = await getJSON(`${API_URL}/${id}`)
+    const json = await getJSON(`${API_URL + id}`);
     state.recipe = {
       cookingTime: json.data.recipe.cooking_time,
       id: json.data.recipe.id,
@@ -20,6 +24,25 @@ export async function loadRecipe(id) {
       title: json.data.recipe.title,
     };
   } catch (err) {
-    console.error('modle.js:)(',err);
+    console.error('modle.js)))', err);
+    throw err;
+  }
+}
+
+export async function loadSearchResults(query) {
+  try {
+    state.search.query = query;
+    const data = await getJSON(`${API_URL}?search=${query}`);
+    console.log(data);
+    state.search.results = data.data.recipes.map(recipe => ({
+      id: recipe.id,
+      image: recipe.image_url,
+      publisher: recipe.publisher,
+      title: recipe.title,
+    }));
+    console.log(state.search.results)
+  } catch (err) {
+    console.error('modle.js)))', err);
+    throw err;
   }
 }
