@@ -6,6 +6,7 @@ export const state = {
   recipe: {},
   search: {
     query: '',
+    page: 1,
     results: [],
   },
 };
@@ -33,16 +34,16 @@ export async function loadSearchResults(query) {
   try {
     state.search.query = query;
     const data = await getJSON(`${API_URL}?search=${query}`);
-    console.log(data);
     state.search.results = data.data.recipes.map(recipe => ({
       id: recipe.id,
       image: recipe.image_url,
       publisher: recipe.publisher,
       title: recipe.title,
     }));
-    console.log(state.search.results)
   } catch (err) {
     console.error('modle.js)))', err);
     throw err;
   }
 }
+
+export function getSearchResultsPage(page = state.search.page) {}
