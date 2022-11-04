@@ -50,16 +50,19 @@ function controlPagination(goToPage) {
   PaginationView.render(model.state.search);
 }
 
-function controlServing() {
-  model.updateServing(6);
+function controlServing(newServings) {
+  console.log('controlserving',newServings)
+  model.updateServing(newServings);
 
   recipeView.render(model.state.recipe);
 }
 
 function init() {
   recipeView.addHandlerRender(controlRecipes);
+  recipeView.addHandlerUpdateServings(controlServing)
   searchView.addHandlerSearch(controlSearchResults);
   PaginationView.addHandlerClick(controlPagination);
+  
 }
 
 init();
