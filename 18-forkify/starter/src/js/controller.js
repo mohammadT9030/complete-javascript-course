@@ -21,6 +21,9 @@ async function controlRecipes() {
     if (!(id = window.location.hash.slice(1))) return;
     recipeView.renderSpinner(recipeContainer);
 
+    // 0) update resualt view to mark selected search resualt
+    resultView.update(model.getSearchResultsPage());
+
     // 1) get data (loading recipe)
     await model.loadRecipe(id);
 
@@ -38,7 +41,7 @@ async function controlSearchResults() {
     if (!query) return;
     await model.loadSearchResults(query);
     // resultView.render(model.state.search.results);
-    resultView.render(model.getSearchResultsPage(2));
+    resultView.render(model.getSearchResultsPage());
     PaginationView.render(model.state.search);
   } catch (err) {
     console.log(err);
@@ -51,18 +54,25 @@ function controlPagination(goToPage) {
 }
 
 function controlServing(newServings) {
-  console.log('controlserving',newServings)
+  console.log('controlserving', newServings);
   model.updateServing(newServings);
 
-  recipeView.render(model.state.recipe);
+  recipeView.update(model.state.recipe);
+  // recipeView.render(model.state.recipe);
+}
+
+function controlBookmark() {
+  if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
+  else model.deleteBookmark(model.state.recipe.id);
+  recipeView.update(model.state.recipe);
 }
 
 function init() {
   recipeView.addHandlerRender(controlRecipes);
-  recipeView.addHandlerUpdateServings(controlServing)
+  recipeView.addHandlerUpdateServings(controlServing);
+  recipeView.addHandlerAddBookmark(controlBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   PaginationView.addHandlerClick(controlPagination);
-  
 }
 
 init();
